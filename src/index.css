@@ -1,13 +1,50 @@
 body {
-  font-family: Georgia, serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   background-color: #f8f8f8;
   margin: 0;
-  padding: 0;
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #logo-image {
-  width: 10vw;
+  height: 20vh;
   margin-right: 10px;
 }
 
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  gap: 1rem;
+  padding-left: 1rem;
+  align-items: center;
+}
+
+.navbar > a {
+  color: black;
+  text-decoration: none;
+
+
+}
+
+.active {
+  font-weight: 600;
+
+}
 /* Add your own custom styles here */
+
+.home {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
