@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Books from "./components/Books/Books";
 import SingleBook from "./components/Books/SingleBook";
+import Search from "./components/Seach";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Account from "./components/Auth/Account";
@@ -29,7 +30,7 @@ function App() {
     }
 
     fetchBooks();
-  }, [api, books]);
+  }, [api, setBooks]);
 
   const authenticate = useCallback(
     async (token) => {
@@ -98,6 +99,7 @@ function App() {
           }
         />
         <Route path="/books/:id" element={<SingleBook books={books} />} />
+        <Route path="/books/search/?" element={<Search books={books} />} />
         <Route
           path="/login"
           element={<Login api={api} authenticate={authenticate} />}

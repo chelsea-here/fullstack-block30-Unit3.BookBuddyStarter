@@ -105,3 +105,8 @@ hr {
 .bookcoverSingle {
   width: 20rem;
 }
+
+.checkedOut {
+  font-style: italic;
+  color: gray;
+}

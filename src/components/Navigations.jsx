@@ -9,12 +9,24 @@ export default function Navigations() {
       </div>
       <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
         Home
+      </NavLink>{" "}
+      <NavLink
+        to="/books"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        Books
       </NavLink>
       <NavLink
         to="/login"
         className={({ isActive }) => (isActive ? "active" : "")}
       >
         Login
+      </NavLink>
+      <NavLink
+        to="/account"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        My Account
       </NavLink>
     </div>
   );
