@@ -28,7 +28,7 @@ export default function Search({ books }) {
         searchResults.map((book) => {
           return (
             <div key={book.id}>
-              <Link to={`/players/${book.id}`}>
+              <Link to={`/books/${book.id}`}>
                 <h3>{book.title}</h3>
               </Link>
             </div>

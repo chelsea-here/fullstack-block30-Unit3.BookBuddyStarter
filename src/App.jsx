@@ -22,7 +22,6 @@ function App() {
     async function fetchBooks() {
       try {
         const { data } = await axios.get(`${api}/books`);
-        // console.log(data);
         setBooks(data);
       } catch (error) {
         console.error(error);
@@ -30,28 +29,23 @@ function App() {
     }
 
     fetchBooks();
-  }, [api, setBooks]);
+  }, [api]);
 
-  const authenticate = useCallback(
-    async (token) => {
-      try {
-        if (!token) {
-          throw Error("no token found");
-        }
-        const response = await axios.get(`${api}/users/me`, {
-          headers: {
-            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-          },
-        });
-        console.log(response);
-        setUser(response.data);
-        console.log(user);
-      } catch (error) {
-        console.error(error);
+  const authenticate = useCallback(async (token) => {
+    try {
+      if (!token) {
+        throw Error("no token found");
       }
-    },
-    [user]
-  );
+      const response = await axios.get(`${api}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   useEffect(() => {
     const loggedInToken = window.localStorage.getItem("token");
@@ -68,7 +62,6 @@ function App() {
             Authorization: `Bearer ${window.localStorage.getItem("token")}`,
           },
         });
-        console.log("reserves", data);
         setReserves(data);
       } catch (error) {
         console.error(error);
@@ -95,6 +88,7 @@ function App() {
               setReserves={setReserves}
               user={user}
               authenticate={authenticate}
+              setBooks={setBooks}
             />
           }
         />

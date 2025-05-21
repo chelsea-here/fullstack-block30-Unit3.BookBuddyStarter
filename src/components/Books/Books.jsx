@@ -30,6 +30,37 @@ export default function Books({
     }
   };
 
+  const returnBook = async (bookId) => {
+    const getRes = (bookId) => {
+      const userReservations = user.reservations;
+      return userReservations.find((reservation) => {
+        if (reservation.bookid === bookId) {
+          return reservation;
+        }
+      });
+    };
+    const resId = getRes(bookId).id;
+    // console.log(resId);
+
+    try {
+      await axios.delete(
+        `${api}/reservations/${resId}`,
+        // { resId: resId },
+        {
+          headers: {
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const newReserves = reserves.filter((res) => {
+        return res.id !== resId;
+      });
+      setReserves(newReserves);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const searchForBooks = (formData) => {
     const target = formData.get("searchBar").toLowerCase();
     navigate(`/books/search/?book=${target}`);
@@ -66,18 +97,21 @@ export default function Books({
                 <p>{book.title}</p>
               </Link>
               <span className="author"> {book.author}</span>
+              <br />
 
-              {!book.available &&
-                (checkRes(book.id) ? (
-                  <p>You have this book checked out.</p>
+              {user.id &&
+                (book.available ? (
+                  <button onClick={() => reserveBook(book.id)}>Reserve</button>
+                ) : checkRes(book.id) ? (
+                  <button
+                    className="return"
+                    onClick={() => returnBook(book.id)}
+                  >
+                    Return Book
+                  </button>
                 ) : (
                   <p className="checkedOut">This book is not available.</p>
                 ))}
-              {/* something about the code above makes my page continuously render */}
-
-              {user.id && book.available && (
-                <button onClick={() => reserveBook(book.id)}>Reserve</button>
-              )}
               <div>
                 <br />
               </div>

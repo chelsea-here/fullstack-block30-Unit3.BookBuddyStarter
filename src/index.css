@@ -110,3 +110,8 @@ hr {
   font-style: italic;
   color: gray;
 }
+
+.return {
+  color: red;
+  border-color: red;
+}
