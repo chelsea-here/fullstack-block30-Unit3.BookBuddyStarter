@@ -37,7 +37,7 @@ function App() {
       }
       const response = await axios.get(`${api}/users/me`, {
         headers: {
-          Authorization: `Bearer ${token})}`,
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         },
       });
       setUser(response.data);
@@ -78,7 +78,7 @@ function App() {
     }
   };
 
-  const checkOutBook = async (bookId) => {
+  const checkOutBook = async (bookId, user) => {
     try {
       authenticate(window.localStorage.getItem("token"));
       const { data } = await axios.post(
@@ -108,13 +108,20 @@ function App() {
   };
 
   // Function to get the reservation ID for a book by a user
-  const getUserResId = (book, user) => {
+  const checkRes = (book, user) => {
     const userReservations = user.reservations || [];
     return userReservations.find((reservation) => {
-      const myRes = reservation.bookid === book.id;
-      return myRes.id;
+      return reservation.bookid === book.id;
     });
   };
+  const getResId = (book, user) => {
+    const reservation = checkRes(book, user);
+    return reservation ? reservation.id : null;
+  };
+
+  function addDefaultImage(e) {
+    e.target.src = "https://miro.medium.com/v2/1*94SsFbivh18YNKuiTEIkmA.jpeg";
+  }
 
   return (
     <>
@@ -127,9 +134,11 @@ function App() {
             <Books
               books={books}
               user={user}
-              getUserResId={getUserResId}
+              getResId={getResId}
+              checkRes={checkRes}
               checkInBook={checkInBook}
               checkOutBook={checkOutBook}
+              addDefaultImage={addDefaultImage}
             />
           }
         />
@@ -139,9 +148,11 @@ function App() {
             <SingleBook
               books={books}
               user={user}
-              getUserResId={getUserResId}
+              getResId={getResId}
+              checkRes={checkRes}
               checkInBook={checkInBook}
               checkOutBook={checkOutBook}
+              addDefaultImage={addDefaultImage}
             />
           }
         />
@@ -154,7 +165,12 @@ function App() {
         <Route
           path="/account"
           element={
-            <Account books={books} user={user} checkInBook={checkInBook} />
+            <Account
+              books={books}
+              user={user}
+              checkInBook={checkInBook}
+              addDefaultImage={addDefaultImage}
+            />
           }
         />
       </Routes>

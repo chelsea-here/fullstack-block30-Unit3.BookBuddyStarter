@@ -5,15 +5,21 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Books({
   books,
   user,
-  getUserResId,
+  checkRes,
+  getResId,
   checkOutBook,
   checkInBook,
+  addDefaultImage,
 }) {
   const navigate = useNavigate();
 
   const searchForBooks = (formData) => {
     const target = formData.get("searchBar").toLowerCase();
     navigate(`/books/search/?book=${target}`);
+  };
+  const clickHandler = (book, user) => {
+    const reservationId = getResId(book, user);
+    checkInBook(reservationId, book.id);
   };
 
   return (
@@ -37,6 +43,7 @@ export default function Books({
                     src={book.coverimage}
                     alt={book.title}
                     className="bookcover"
+                    onError={addDefaultImage}
                   />
                   <p>{book.title}</p>
                 </Link>
@@ -45,15 +52,13 @@ export default function Books({
 
                 {window.localStorage.getItem("token") &&
                   (book.available ? ( // If the book is available, show the reserve button
-                    <button onClick={() => checkOutBook(book.id)}>
+                    <button onClick={() => checkOutBook(book.id, user)}>
                       Reserve
                     </button>
-                  ) : getUserResId(book, user) ? ( // If the book is not available, check if the user has a reservation
+                  ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
                     <button
                       className="return"
-                      onClick={() =>
-                        checkInBook(getUserResId(book, user), user)
-                      }
+                      onClick={() => clickHandler(book, user)}
                     >
                       Return Book
                     </button>
