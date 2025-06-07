@@ -5,7 +5,9 @@ export default function Navigations() {
   return (
     <div className="navbar">
       <div className="logo">
-        <span>My Library App</span>
+        <span>
+          {"< "}Give a Hoot{" >"}
+        </span>
       </div>
       <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
         Home
@@ -16,18 +18,30 @@ export default function Navigations() {
       >
         Books
       </NavLink>
-      <NavLink
-        to="/login"
-        className={({ isActive }) => (isActive ? "active" : "")}
-      >
-        Login
-      </NavLink>
-      <NavLink
-        to="/account"
-        className={({ isActive }) => (isActive ? "active" : "")}
-      >
-        My Account
-      </NavLink>
+      {window.localStorage.getItem("token") ? (
+        <>
+          {" "}
+          <NavLink
+            to="/account"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            My Account
+          </NavLink>
+          <NavLink
+            to="/login"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Logout
+          </NavLink>
+        </>
+      ) : (
+        <NavLink
+          to="/login"
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          Login
+        </NavLink>
+      )}
     </div>
   );
 }

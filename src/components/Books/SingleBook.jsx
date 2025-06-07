@@ -1,7 +1,13 @@
 /* TODO - add your code to create a functional React component that renders details for a single book. Fetch the book data from the provided API. You may consider conditionally rendering a 'Checkout' button for logged in users. */
 import { useParams, Link } from "react-router-dom";
 
-export default function SingleBook({ books }) {
+export default function SingleBook({
+  books,
+  user,
+  reserveBook,
+  removeResByBookId,
+  checkRes,
+}) {
   const params = useParams();
   const id = params.id * 1;
   const book = books.find((book) => {
@@ -26,11 +32,28 @@ export default function SingleBook({ books }) {
             <hr />
             <p>{book.description}</p>
             <p>Availability:</p>
-            {book.available ? (
-              <p>Available to Reserve</p>
-            ) : (
-              <p>This book is not currently available</p>
-            )}
+
+            {window.localStorage.getItem("token") &&
+              (book.available ? ( // If the book is available, show the reserve button
+                <>
+                  <p> This book is available</p>
+                  <button onClick={() => reserveBook(book.id)}>Reserve</button>
+                </>
+              ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
+                <>
+                  <p className="checkedOut">
+                    You currently have this book checked out.
+                  </p>
+                  <button
+                    className="return"
+                    onClick={() => removeResByBookId(book.id, user)}
+                  >
+                    Return Book
+                  </button>
+                </>
+              ) : (
+                <p className="checkedOut">This book is not available.</p>
+              ))}
           </div>
           <Link to="/books">Back to all Books</Link>
         </div>

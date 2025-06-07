@@ -1,26 +1,15 @@
 /* TODO - add your code to create a functional React component that renders account details for a logged in user. Fetch the account data from the provided API. You may consider conditionally rendering a message for other users that prompts them to log in or create an account.  */
-import axios from "axios";
 
-export default function Account({ user, reserves, setReserves, api }) {
-  const userReservations = user.reservations;
+export default function Account({ user, removeReservation, books }) {
+  const userReservations = user.reservations || [];
+  function findBook(myBookId) {
+    return books.find((book) => {
+      return book.id === myBookId;
+    });
+  }
 
-  const removeReservation = async (reservationId) => {
-    try {
-      await axios.delete(`${api}/reservations/${reservationId}`, {
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
-      });
-      setReserves(
-        reserves.filter((res) => {
-          res.id !== reservationId;
-        })
-      );
-      console.log(reserves);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  console.log("User Reservations:", userReservations);
+
   return (
     <div className="container">
       <hr />
@@ -37,16 +26,34 @@ export default function Account({ user, reserves, setReserves, api }) {
         <h3>My Reservations:</h3>
         <ol>
           {userReservations.length > 0 ? (
-            user.reservations.map((reservation) => {
+            userReservations.map((reservation) => {
+              let reservedBook = findBook(reservation.bookid);
               return (
                 <li key={reservation.id}>
                   <p>Reservation ID: {reservation.id}</p>
                   <p>Book ID: {reservation.bookid}</p>
-                  <p>Book Title: {reservation.title}</p>
-                  <p>Book Author: {reservation.author}</p>
-                  <button onClick={() => removeReservation(reservation.id)}>
-                    Return Book
-                  </button>
+                  {reservedBook && (
+                    <>
+                      <p>
+                        Book Cover:{" "}
+                        <img
+                          src={reservedBook.coverimage}
+                          alt={reservedBook.title}
+                          className="bookcover"
+                        />
+                      </p>
+                      <p>Book Title: {reservedBook.title}</p>
+                      <p>Book Author: {reservedBook.author}</p>
+
+                      <button
+                        onClick={() =>
+                          removeReservation(reservation.id, reservation.bookid)
+                        }
+                      >
+                        Return Book
+                      </button>
+                    </>
+                  )}
                   <hr />
                 </li>
               );
@@ -59,5 +66,3 @@ export default function Account({ user, reserves, setReserves, api }) {
     </div>
   );
 }
-
-//todo: why isn't it loading upon refresh?

@@ -7,7 +7,7 @@ export default function Home({ user }) {
       <img src={LogoImage} id="logo-image" />
       {user.id ? (
         <div>
-          <h1>Welcome to Your Library App, {user.firstname}!</h1>
+          <h1>Welcome and thank you for giving a Hoot, {user.firstname}!</h1>
           <hr />
           <div>
             <Link to="/account">Account Details</Link>
@@ -20,7 +20,7 @@ export default function Home({ user }) {
         </div>
       ) : (
         <div>
-          <h1>Welcome to My Library App!</h1> <hr />
+          <h1>Welcome to Give a Hoot Library App!</h1> <hr />
           <div className="flexRow">
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
