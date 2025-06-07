@@ -5,9 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Books({
   books,
   user,
-  checkRes,
-  reserveBook,
-  removeResByBookId,
+  getUserResId,
+  checkOutBook,
+  checkInBook,
 }) {
   const navigate = useNavigate();
 
@@ -45,13 +45,15 @@ export default function Books({
 
                 {window.localStorage.getItem("token") &&
                   (book.available ? ( // If the book is available, show the reserve button
-                    <button onClick={() => reserveBook(book.id)}>
+                    <button onClick={() => checkOutBook(book.id)}>
                       Reserve
                     </button>
-                  ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
+                  ) : getUserResId(book, user) ? ( // If the book is not available, check if the user has a reservation
                     <button
                       className="return"
-                      onClick={() => removeResByBookId(book.id, user)}
+                      onClick={() =>
+                        checkInBook(getUserResId(book, user), user)
+                      }
                     >
                       Return Book
                     </button>

@@ -1,4 +1,4 @@
-export default function Account({ books, user, removeReservation }) {
+export default function Account({ books, user, checkInBook }) {
   const userReservations = user.reservations || [];
   function findBook(myBookId) {
     return books.find((book) => {
@@ -43,7 +43,7 @@ export default function Account({ books, user, removeReservation }) {
 
                       <button
                         onClick={() =>
-                          removeReservation(reservation.id, reservation.bookid)
+                          checkInBook(reservation.id, reservation.bookid)
                         }
                       >
                         Return Book

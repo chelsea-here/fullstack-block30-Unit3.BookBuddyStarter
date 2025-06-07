@@ -16,7 +16,9 @@ function App() {
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState({});
 
-  //onMount,fetch books from the API
+  //fetch books from the API:
+  // This effect runs once when the component mounts to fetch the book data
+  // and sets the books state with the fetched data.
   useEffect(() => {
     async function fetchBooks() {
       try {
@@ -26,15 +28,20 @@ function App() {
         console.error(error);
       }
     }
+
     fetchBooks();
   }, [api]);
 
+  // This function authenticates the user by checking the token passed to it.
+  // The useCallback hook is used to memoize the authenticate function, preventing unnecessary re-creations on every render.
   const authenticate = useCallback(async (token) => {
     try {
+      // If no token is found, it sets the user state to an empty object.
       if (!token) {
         setUser({});
         throw Error("no token found");
       }
+      // If the token is found, it tries to fetch the user's data from the API and sets the user state.
       const response = await axios.get(`${api}/users/me`, {
         headers: {
           Authorization: `Bearer ${token})}`,
@@ -46,7 +53,6 @@ function App() {
     }
   }, []);
 
-  //onMount and if user.id changes, check if a token exists in localStorage and authenticate the user
   useEffect(() => {
     const loggedInToken = window.localStorage.getItem("token");
     if (loggedInToken) {
@@ -78,6 +84,18 @@ function App() {
     }
   };
 
+  const checkInBookByUserState = async (bookId, user) => {
+    const getRes = (bookId) => {
+      return user.reservations.find((reservation) => {
+        if (reservation.bookid === bookId) {
+          return reservation;
+        }
+      });
+    };
+    const resId = getRes(bookId).id;
+    checkInBook(resId, bookId);
+  };
+
   const checkOutBook = async (bookId) => {
     try {
       authenticate(window.localStorage.getItem("token"));
@@ -107,12 +125,11 @@ function App() {
     }
   };
 
-  // Function to get the reservation ID for a book by a user
+  // Check if the user has a reservation for the book with the given bookId
   const getUserResId = (book, user) => {
     const userReservations = user.reservations || [];
     return userReservations.find((reservation) => {
-      const myRes = reservation.bookid === book.id;
-      return myRes.id;
+      return reservation.bookid === book.id;
     });
   };
 
@@ -128,8 +145,8 @@ function App() {
               books={books}
               user={user}
               getUserResId={getUserResId}
-              checkInBook={checkInBook}
               checkOutBook={checkOutBook}
+              checkInBookByUserState={checkInBookByUserState}
             />
           }
         />
@@ -140,8 +157,8 @@ function App() {
               books={books}
               user={user}
               getUserResId={getUserResId}
-              checkInBook={checkInBook}
               checkOutBook={checkOutBook}
+              checkInBookByUserState={checkInBookByUserState}
             />
           }
         />
@@ -163,10 +180,3 @@ function App() {
 }
 
 export default App;
-
-// FUTURE FEATURES:
-// 1. MODIFY SEARCH TO PERFORM ON CHANGE, FILTERING BOOKS, BUT KEEPING CARDS VISUAL
-// 1. Add a feature to allow users to update their profile information.
-// 2. Implement a feature to allow users to view their reservation history.
-// 3. Add a feature to allow users to search for books by author or genre.
-// 4. Implement pagination for the book list to improve performance with large datasets.

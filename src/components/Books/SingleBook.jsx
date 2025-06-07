@@ -3,9 +3,9 @@ import { useParams, Link } from "react-router-dom";
 export default function SingleBook({
   books,
   user,
-  checkRes,
-  reserveBook,
-  removeResByBookId,
+  getUserResId,
+  checkInBook,
+  checkOutBook,
 }) {
   const params = useParams();
   const id = params.id * 1;
@@ -36,16 +36,18 @@ export default function SingleBook({
               (book.available ? ( // If the book is available, show the reserve button
                 <>
                   <p> This book is available</p>
-                  <button onClick={() => reserveBook(book.id)}>Reserve</button>
+                  <button onClick={() => checkOutBook(book.id)}>Reserve</button>
                 </>
-              ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
+              ) : getUserResId(book, user) ? ( // If the book is not available, check if the user has a reservation
                 <>
                   <p className="checkedOut">
                     You currently have this book checked out.
                   </p>
                   <button
                     className="return"
-                    onClick={() => removeResByBookId(book.id, user)}
+                    onClick={() =>
+                      checkInBook(getUserResId(book, user), book.id)
+                    }
                   >
                     Return Book
                   </button>
