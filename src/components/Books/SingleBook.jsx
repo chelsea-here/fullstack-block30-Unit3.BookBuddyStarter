@@ -3,9 +3,9 @@ import { useParams, Link } from "react-router-dom";
 export default function SingleBook({
   books,
   user,
+  checkRes,
   reserveBook,
   removeResByBookId,
-  checkRes,
 }) {
   const params = useParams();
   const id = params.id * 1;

@@ -1,4 +1,4 @@
-export default function Account({ user, removeReservation, books }) {
+export default function Account({ books, user, removeReservation }) {
   const userReservations = user.reservations || [];
   function findBook(myBookId) {
     return books.find((book) => {

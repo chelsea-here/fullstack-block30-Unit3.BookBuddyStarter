@@ -136,13 +136,10 @@ function App() {
           element={
             <Books
               books={books}
-              api={api}
               user={user}
-              authenticate={authenticate}
-              setBooks={setBooks}
-              removeResByBookId={removeResByBookId}
-              reserveBook={reserveBook}
               checkRes={checkRes}
+              reserveBook={reserveBook}
+              removeResByBookId={removeResByBookId}
             />
           }
         />
@@ -151,10 +148,10 @@ function App() {
           element={
             <SingleBook
               books={books}
+              user={user}
+              checkRes={checkRes}
               reserveBook={reserveBook}
               removeResByBookId={removeResByBookId}
-              checkRes={checkRes}
-              user={user}
             />
           }
         />
@@ -170,7 +167,6 @@ function App() {
             <Account
               books={books}
               user={user}
-              api={api}
               removeReservation={removeReservation}
             />
           }

@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Books({
   books,
+  user,
+  checkRes,
   reserveBook,
   removeResByBookId,
-  checkRes,
-  user,
 }) {
   const navigate = useNavigate();
 
