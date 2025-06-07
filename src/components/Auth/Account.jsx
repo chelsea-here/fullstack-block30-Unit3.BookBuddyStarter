@@ -1,10 +1,25 @@
-export default function Account({ books, user, checkInBook, addDefaultImage }) {
+import { useNavigate } from "react-router-dom";
+
+export default function Account({
+  books,
+  user,
+  checkInBook,
+  addDefaultImage,
+  authenticate,
+}) {
   const userReservations = user.reservations || [];
   function findBook(myBookId) {
     return books.find((book) => {
       return book.id === myBookId;
     });
   }
+  const navigate = useNavigate();
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    authenticate(null);
+    alert("You have been logged out.");
+    navigate("/");
+  };
 
   return (
     <div className="container">
@@ -59,6 +74,8 @@ export default function Account({ books, user, checkInBook, addDefaultImage }) {
                 <p>No reservations</p>
               )}
             </ol>
+            <hr />
+            <button onClick={logout}>Logout</button>
           </div>
         </div>
       ) : (

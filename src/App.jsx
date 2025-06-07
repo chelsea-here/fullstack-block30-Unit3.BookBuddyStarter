@@ -166,6 +166,7 @@ function App() {
           path="/account"
           element={
             <Account
+              authenticate={authenticate}
               books={books}
               user={user}
               checkInBook={checkInBook}
