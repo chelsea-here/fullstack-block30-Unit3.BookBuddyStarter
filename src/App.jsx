@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-// import LogoImage from "./assets/owl-babelplatz.svg"
 
 import Home from "./components/Home";
 import Books from "./components/Books/Books";
@@ -16,7 +15,6 @@ function App() {
   const api = "https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api";
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState({});
-  // const [reserves, setReserves] = useState([]); //refactoring to remove reserves state
 
   useEffect(() => {
     async function fetchBooks() {
@@ -34,7 +32,6 @@ function App() {
   const authenticate = useCallback(async (token) => {
     try {
       if (!token) {
-        //do i need to set user to null here?
         setUser({});
         throw Error("no token found");
       }
@@ -44,7 +41,6 @@ function App() {
         },
       });
       setUser(response.data);
-      console.log("User authenticated:", response.data);
     } catch (error) {
       console.error(error);
     }
@@ -57,26 +53,6 @@ function App() {
     }
   }, [user.id, authenticate]);
 
-  // useEffect(() => {
-  //   const fetchReserves = async () => {
-  //     try {
-  //       const { data } = await axios.get(`${api}/reservations`, {
-  //         headers: {
-  //           Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-  //         },
-  //       });
-  //       setReserves(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   const loggedInToken = window.localStorage.getItem("token");
-  //   if (loggedInToken) {
-  //     fetchReserves();
-  //   }
-  // }, [user.id]);
-
-  //in middle of updating with add bookid
   const removeReservation = async (reservationId, bookId) => {
     try {
       await axios.delete(`${api}/reservations/${reservationId}`, {
@@ -84,17 +60,11 @@ function App() {
           Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         },
       });
-      // setReserves(
-      //   reserves.filter((res) => {
-      //     res.id !== reservationId;
-      //   })
-      // );
       setUser(
         user.reservations.filter((res) => {
           res.id !== reservationId;
         })
       );
-      console.log("User reservations after removal:", user.reservations);
       const updatedBooks = books.map((book) => {
         if (book.id == bookId) {
           return { ...book, available: true };
@@ -102,8 +72,6 @@ function App() {
         return book;
       });
       setBooks(updatedBooks);
-      console.log("Updated books after removal:", updatedBooks);
-      console.log("Reservation removed:", reservationId);
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +86,6 @@ function App() {
       });
     };
     const resId = getRes(bookId).id;
-    console.log("Removing reservation with ID:", resId);
     removeReservation(resId, bookId);
   };
 
@@ -134,26 +101,18 @@ function App() {
           },
         }
       );
-      // setReserves([...reserves, data]);
-      // console.log(data);
-      // console.log("Reserves updated:", reserves);
       setUser({
         ...user,
         reservations: [...user.reservations, data],
       });
-      /// TODO: setReserves to include the new reservation
-      /// We suspect reserves is not being updated correctly for user
+
       const updatedBooks = books.map((book) => {
         if (book.id === bookId) {
-          console.log("Attempting to checkout book:", book);
           return { ...book, available: false }; // Mark the book as reserved
         }
         return book;
       });
       setBooks(updatedBooks);
-      console.log("Updated books:", updatedBooks);
-      console.log("Book reserved:", data);
-      console.log("User updated:", user);
     } catch (error) {
       console.error(error);
     }

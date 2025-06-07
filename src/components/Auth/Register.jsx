@@ -18,8 +18,8 @@ export default function Register({ api }) {
       password,
     };
     try {
-      const { data } = await axios.post(`${api}/users/register`, user);
-      console.log(data.token);
+      await axios.post(`${api}/users/register`, user);
+      // If registration is successful, redirect to login page
       alert("Thank you for signing up! Now, please login.");
       navigate("/login");
       // ALTERNATIVELY I COULD ADD TOKEN TO LOCAL STORAGE HERE AND RUN AUTHENTICATE
@@ -27,6 +27,7 @@ export default function Register({ api }) {
       console.error(error);
     }
   };
+
   return (
     <div className="container">
       <hr />

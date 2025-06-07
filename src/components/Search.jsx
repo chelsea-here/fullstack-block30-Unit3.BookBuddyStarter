@@ -7,19 +7,16 @@ export default function Search({ books }) {
 
   const nameSearch = searchParams.get("book");
   const navigate = useNavigate();
-  console.log(nameSearch);
 
   useEffect(() => {
     const result = books.filter((book) => {
       return book.title.toLowerCase().includes(nameSearch);
     });
-    console.log(result);
     setSearchResults(result);
   }, [books, nameSearch]);
 
   const clearSearch = () => {
     setSearchResults([]);
-    //alert('navigating to players')
     navigate(-1);
   };
   return (

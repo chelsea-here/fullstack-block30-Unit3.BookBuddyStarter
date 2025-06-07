@@ -14,7 +14,6 @@ export default function Login({ api, authenticate }) {
     };
     try {
       const { data } = await axios.post(`${api}/users/login`, user);
-      console.log(data);
 
       window.localStorage.setItem("token", data.token);
       authenticate(window.localStorage.getItem("token"));
