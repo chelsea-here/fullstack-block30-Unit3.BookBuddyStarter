@@ -108,6 +108,7 @@ hr {
 
 .card:hover {
   box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 .cardHeader {
