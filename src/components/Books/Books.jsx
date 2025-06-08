@@ -38,35 +38,39 @@ export default function Books({
           books.map((book) => {
             return (
               <div key={book.id} className="card">
-                <Link key={book.id} to={{ pathname: `/books/${book.id}` }}>
-                  <img
-                    src={book.coverimage}
-                    alt={book.title}
-                    className="bookcover"
-                    onError={addDefaultImage}
-                  />
-                  <p>{book.title}</p>
-                </Link>
-                <span className="author"> {book.author}</span>
-                <br />
+                <div className="cardHeader">
+                  <Link key={book.id} to={{ pathname: `/books/${book.id}` }}>
+                    <img
+                      src={book.coverimage}
+                      alt={book.title}
+                      className="bookcover"
+                      onError={addDefaultImage}
+                    />
+                  </Link>
+                </div>
+                <div className="cardBody">
+                  <Link key={book.id} to={{ pathname: `/books/${book.id}` }}>
+                    <p>{book.title}</p>
+                  </Link>
 
-                {window.localStorage.getItem("token") &&
-                  (book.available ? ( // If the book is available, show the reserve button
-                    <button onClick={() => checkOutBook(book.id, user)}>
-                      Reserve
-                    </button>
-                  ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
-                    <button
-                      className="return"
-                      onClick={() => clickHandler(book, user)}
-                    >
-                      Return Book
-                    </button>
-                  ) : (
-                    <p className="checkedOut">This book is not available.</p>
-                  ))}
-                <div>
+                  <span className="author"> {book.author}</span>
                   <br />
+
+                  {window.localStorage.getItem("token") &&
+                    (book.available ? ( // If the book is available, show the reserve button
+                      <button onClick={() => checkOutBook(book.id, user)}>
+                        Reserve
+                      </button>
+                    ) : checkRes(book, user) ? ( // If the book is not available, check if the user has a reservation
+                      <button
+                        className="return"
+                        onClick={() => clickHandler(book, user)}
+                      >
+                        Return Book
+                      </button>
+                    ) : (
+                      <p className="checkedOut">This book is not available.</p>
+                    ))}
                 </div>
               </div>
             );
